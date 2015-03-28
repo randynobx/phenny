@@ -35,7 +35,10 @@ def github(phenny, input):
         if len(input.split()) > 3:
             for i in input.split()[3:]:
                 try:
-                    custom[str(i)] = item[str(i)]
+                    if isinstance(item[i], dict):
+                        custom[str(i)] = item[str(i)]['login']
+                    else:
+                        custom[str(i)] = item[str(i)]
                 except:
                     phenny.say('Could not find value for ' + str(i))
         string = "\x0305" +repo + '\x0355 #' + Id + '\x0399 |\x0309 by ' + user + '\x0399 | ' + title + ' | ' + url + '\x0307 (' + comments + ' comments)\x0310 [' + state + ']'
