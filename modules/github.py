@@ -9,7 +9,7 @@ import requests
 import json
 
 def github(phenny, input):
-    """.issue <issue id> [owner/repo] [custom value] | .pr <pr id> [owner/repo] | repo defaults to hut/ranger | custom values: assignee, locked, milestone, created_at, updated_at, closed_at, closed_by, body
+    """.issue <issue id> [owner/repo] [custom value] | .pr <pr id> [owner/repo] | repo defaults to hut/ranger | custom values: assignee, locked, milestone, created_at, updated_at, closed_at, closed_by, body; pr only values: merged_by, merged_at
     """
     req = str(input.split()[0])
     Id = str(input.split()[1])
