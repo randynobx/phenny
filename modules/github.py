@@ -48,5 +48,37 @@ def github(phenny, input):
     else:
         phenny.say('#' + Id + ' not found for repo ' + repo)
 github.commands = ['issue', 'pr']
+
+def commits(phenny, input):
+    """.commits [branch] [owner/repo] | defaults: branch=master, owner/repo=hut/ranger
+    """
+    # set default values
+    branch = 'master'
+    repo = 'hut/ranger'
+    if len(input.split()) > 1:
+        branch = str(input.split()[1])
+    if len(input.split()) > 2:
+        repo = input.split()[2]
+
+    i = requests.get('https://api.github.com/repos/' + repo + '/git/refs/heads/' + branch)
+    if i.ok:
+        head = json.loads(i.text or i.content)
+        commitHash = head['object']['sha']
+        j = requests.get('https://api.github.com/repos/' + repo + '/git/commits/' + commitHash)
+        if j.ok:
+            commit = json.loads(j.text or j.content)
+            author = commit['author']['name']
+            msg = commit['message']
+            date = commit['committer']['date']
+            url = commit['html_url']
+
+            string = "\x0305" +repo + '\x0355 ' + branch + '\x0399 | \x0307' + date + '\x0399 |\x0309 authored by ' + author + '\x0399 | ' + msg + ' | ' + url + '\x0307'
+            phenny.say(string)
+        else:
+            phenny.say("issue fetching latest commit info")
+    else:
+        phenny.say("issue fetching branch info")
+commits.commands = ['commits', 'lc']
+
 if __name__ == '__main__': 
    print(__doc__.strip())
